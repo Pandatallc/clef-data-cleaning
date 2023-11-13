@@ -21,7 +21,7 @@ Manual steps
 1. Create a data folder in the root directory
 data
     - raw
-        - MASTER FILE.xlsx
+        - MASTER FILE.xlsx # Manually copied from Dropbox
     - interim
         - pat_pop.csv # will need to create this with pandas, see notebook.
     - processed
