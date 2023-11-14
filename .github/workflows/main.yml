@@ -1,0 +1,26 @@
+name: Unit Tests
+on:
+  push:
+    branches: [ main, develop, feature*]
+  pull_request:
+    branches: [main, develop ]
+jobs: 
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    # Run local action
+    - name: Test action-setup-venv
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Print debug vars
+    - name: Print variables for debugging
+      run: |
+        echo "PATH: ${PATH}"
+    
+    - name: Test with pytest
+      run: |
+        python -m pytest tests/unit
