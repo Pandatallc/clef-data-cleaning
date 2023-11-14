@@ -6,7 +6,7 @@ from tests.conftest import *
 
 
 class TestDxAfterDxDateScrub:
-    dxafterdxdate_df = pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate"))
+    dxafterdxdate_df = pd.read_csv("data/interim/dxafterdxdate.csv")
     dxafterdxdate_instructions = instructions["dxafterdxdate"]
 
     def display_check(self, result):

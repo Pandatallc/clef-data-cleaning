@@ -28,9 +28,13 @@ opthafterdxdate = {
 }
 
 
-@pytest.fixture(scope="session", autouse=True)
-def mock_pat_pop():
-    return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "pat_pop.csv"))
+# @pytest.fixture(scope="session", autouse=True)
+# def mock_pat_pop():
+#     return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "pat_pop.csv"))
+
+# @pytest.fixture(scope="session", autouse=True)
+# def mock_dxafterdxdate():
+#     return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate.csv"))
 
 
 @pytest.fixture(scope="session", autouse=True)
