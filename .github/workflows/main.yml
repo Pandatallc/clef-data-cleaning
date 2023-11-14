@@ -12,10 +12,9 @@ jobs:
 
     # Run locla action
     - name: Test action-setup-venv
-      id: venv
-      with:
-        python-version: 3.11
-        install-cmd: pip install -r requirements.txt
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
     # Print debug vars
     - name: Print variables for debugging
