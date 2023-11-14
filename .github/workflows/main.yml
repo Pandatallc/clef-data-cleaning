@@ -23,4 +23,5 @@ jobs:
     
     - name: Test with pytest
       run: |
+        cd clef-data-cleaning
         python -m pytest tests
