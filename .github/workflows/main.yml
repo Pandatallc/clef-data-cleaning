@@ -21,6 +21,8 @@ jobs:
       run: |
         echo "VIRTUAL_ENV: ${VIRTUAL_ENV}"
         echo "PATH: ${PATH}"
+        echo "CURRENT DIRECTORY: ${pwd}"
+        echo "List dir": ${ls}
     
     - name: Test with pytest
       run: |
