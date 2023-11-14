@@ -2,7 +2,7 @@ from typing import Mapping, Sequence, Tuple
 import numpy as np
 import pandas as pd
 
-from traitlets import List
+from typing import List
 from etls.etl_helpers import (
     string_to_blank_save_date,
     string_to_blank_save_numeric,
