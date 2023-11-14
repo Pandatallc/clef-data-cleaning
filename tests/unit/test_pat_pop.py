@@ -6,7 +6,6 @@ from tests.conftest import *
 
 
 class TestPatpopScrub:
-    pat_pop_df = pd.read_csv("data/interim/pat_pop.csv")
     pat_pop_instructions = instructions["pat_pop"]
     error_kv_list = [(k, v) for k, v in pat_pop_delta_counts.items()]
 
