@@ -1,4 +1,5 @@
 from numpy import NaN
+import os
 import pandas as pd
 import pytest
 from etls.instructions import instructions
