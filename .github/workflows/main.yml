@@ -1,18 +1,27 @@
 on:
   push:
-    branches: [ main, develop]
+    branches: [ main, develop, feature*]
   pull_request:
     branches: [main, develop ]
-  runs-on: ubuntu-latest
-    - uses: actions/checkout@v2
-    - uses: psf/black@stable
-    - uses: isort/isort-action@v1
-  - name: Set up Python
-    uses: actions/setup-python@v4
-    with:
-      python-version: '3.11'
-  - name: Install Depenedencies
-    run: pip install -r requirements.txt
-  - name: Test with pytest
-    run: |
-      pytest tests
+jobs: 
+  self-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    # Run locla action
+    - name: Test action-setup-venv
+      id: venv
+      with:
+        python-version: 3.11
+        install-cmd: pip install -r requirements.txt
+
+    # Print debug vars
+    - name: Print variables for debugging
+      run: |
+        echo "VIRTUAL_ENV: ${VIRTUAL_ENV}"
+        echo "PATH: ${PATH}"
+    
+    - name: Test with pytest
+      run: |
+        pytest tests
