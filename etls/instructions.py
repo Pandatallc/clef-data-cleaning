@@ -1,4 +1,4 @@
-pat_pop = {
+instructions = {"pat_pop" : {
     "OCT_DATE": {
         "format": "date",
         "string_intention": "mixed",
@@ -9,4 +9,7 @@ pat_pop = {
     "cst_OD": {"format": "numeric", "string_intention": "notes"},
     "Sub-RPE 5mm OS": {"format": "numeric", "string_intention": "notes"},
     "questionable_OS": {"format": "numeric", "string_intention": "blank"},
+},
+
+"dxafterdxdate" : {"CURRENT_ICD9_LIST": {"format": "string", "string_intention": "split"}}
 }

@@ -1,12 +1,12 @@
 import pytest
 from etls.sheets.pat_pop import PatpopScrub
-from etls.instructions import pat_pop as pat_pop_ins
+from etls.instructions import instructions
 
 from tests.conftest import *
 
 class TestPatpopScrub:
     pat_pop_df = pd.read_csv("data/interim/pat_pop.csv")
-    pat_pop_instructions = pat_pop_ins
+    pat_pop_instructions = instructions["pat_pop"]
     error_kv_list = [(k,v) for k,v in pat_pop_delta_counts.items()]
 
     def display_check(self, result):

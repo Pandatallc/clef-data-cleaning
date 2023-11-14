@@ -41,3 +41,20 @@ class PatpopScrub:
             return (self.old_col, [ammended_col, self.notes])
         else:
             return (self.old_col, [ammended_col])
+        
+
+class DxAfterDxdateScrub:
+    """Logic for cleaning DxAfterDxdate"""
+    def __init__(self, col: Sequence):
+        self.old_col = col.copy()
+        self.col_name = self.old_col.name
+
+    def clean(self) -> Tuple[Sequence, List[Sequence]]:
+        """Returns (old_column, [amended_column, optional(notes_column)])"""
+        ammended_cols_df = self.old_col.str.split(', ', expand=True)
+        ammended_cols = []
+        for i in ammended_cols_df.columns:
+            ammended_col = ammended_cols_df[i].copy()
+            ammended_col.name = f"{self.col_name}_{i+1}"
+            ammended_cols.append(ammended_col)
+        return(self.old_col, ammended_cols)
