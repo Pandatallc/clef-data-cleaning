@@ -21,9 +21,8 @@ class TestDxAfterDxDateScrub:
             return pd.DataFrame(cols).T.loc[idx]
         return diff
 
-    def test_clean_delta_counts(self):
+    def test_clean_delta_counts(self, mock_dxafterdxdate):
         col_name = "CURRENT_ICD9_LIST"
-        col = self.__class__.dxafterdxdate_df[col_name]
-        ins = self.__class__.dxafterdxdate_instructions[col_name]
+        col = mock_dxafterdxdate[col_name]
         diff = self.display_check(DxAfterDxdateScrub(col).clean())
         assert len(diff) == 40479

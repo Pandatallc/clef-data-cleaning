@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from etls.instructions import instructions
 
-DATA_DIRECTORY = os.path.join(os.path.dirname("__file__"), "..", "data")
+DATA_DIRECTORY = os.path.join(os.path.dirname("__file__"), "data")
 
 pat_pop_delta_counts = {
     "OCT_DATE": 6,
@@ -28,13 +28,13 @@ opthafterdxdate = {
 }
 
 
-# @pytest.fixture(scope="session", autouse=True)
-# def mock_pat_pop():
-#     return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "pat_pop.csv"))
+@pytest.fixture(scope="session", autouse=True)
+def mock_pat_pop():
+    return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "pat_pop.csv"))
 
-# @pytest.fixture(scope="session", autouse=True)
-# def mock_dxafterdxdate():
-#     return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate.csv"))
+@pytest.fixture(scope="session", autouse=True)
+def mock_dxafterdxdate():
+    return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate.csv"))
 
 
 @pytest.fixture(scope="session", autouse=True)
