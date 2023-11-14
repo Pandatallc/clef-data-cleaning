@@ -23,5 +23,5 @@ def test_string_to_blank_save_numeric():
 
 def test_string_to_blank_save_date():
     val = pd.Series(["2019-08-28 00:00:00", "", "4.6", 4.6])
-    assert len(string_to_blank_save_numeric(val).compare(pd.Series(["2019-08-28 00:00:00", NaN, NaN, 4.6]))) == 0
+    assert len(string_to_blank_save_date(val).compare(pd.Series(["2019-08-28 00:00:00", NaN, NaN, 4.6]))) == 0
 
