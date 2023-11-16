@@ -32,5 +32,6 @@ instructions = {
         "Sub-RPE 5mm OS": {"format": "numeric", "string_intention": "notes"},
         "dist_fovea OD": {"format": "numeric", "string_intention": "blank"},
         "Sub-RPE 5mm OD": {"format": "numeric", "string_intention": "notes"},
+        "column_name": {"format": "string", "string_intention": "fix", "lookup_table": {"bad_val": "good_val"}}
     },
 }

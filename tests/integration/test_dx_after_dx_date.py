@@ -6,7 +6,6 @@ from tests.conftest import *
 
 
 class TestDxAfterDxDateScrub:
-
     def display_check(self, result):
         old_col = result[0]
         new_cols = result[1]

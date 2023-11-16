@@ -35,6 +35,7 @@ def mock_pat_pop():
     except:
         return None
 
+
 @pytest.fixture(scope="session", autouse=True)
 def mock_dxafterdxdate():
     try:
