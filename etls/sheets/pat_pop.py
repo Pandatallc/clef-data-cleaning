@@ -37,7 +37,8 @@ class PatpopScrub:
                     [
                         x if type(try_str_to_float(x)) == str else np.nan
                         for x in self.old_col
-                    ]
+                    ],
+                    name=self.notes_col_name
                 )
             else:
                 raise (

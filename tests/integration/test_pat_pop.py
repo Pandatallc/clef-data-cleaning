@@ -29,6 +29,7 @@ class TestPatpopScrub:
         col = mock_pat_pop[col_name]
         ins = self.__class__.pat_pop_instructions[col_name]
         assert list(PatpopScrub(col, ins).notes) == expected
+        assert PatpopScrub(col, ins).notes.name == f"{col_name}_notes"
 
     @pytest.mark.parametrize("col_name,expected", error_kv_list)
     def test_clean_delta_counts(self, col_name, expected, mock_pat_pop):
