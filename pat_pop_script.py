@@ -9,11 +9,16 @@ sys.path.append(conf_path)
 
 if __name__ == "__main__":
     ## clean pat_pop
-    s = SheetCleaner("pat_pop", instructions)
-    df = s.get_clean()
-    df.to_csv("data/processed/pat_pop_revised.csv")
+    # s = SheetCleaner("pat_pop", instructions)
+    # df = s.get_clean()
+    # df.to_csv("data/processed/pat_pop_revised.csv")
 
     # clean dxafterdxdate
     # s = SheetCleaner("dxafterdxdate", instructions)
     # df = s.get_clean()
     # df.to_csv("data/processed/dxafterdxdate_revised.csv")
+
+    ## clean ophth after dxdate
+    s = SheetCleaner("ophthafterdxdate", instructions)
+    df = s.get_clean()
+    df.to_csv("data/processed/ophthafterdxdate_revised.csv")

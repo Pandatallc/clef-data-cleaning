@@ -15,7 +15,7 @@ pat_pop_delta_counts = {
     "questionable_OS": 2,
 }
 
-opthafterdxdate = {
+opthafterdxdate_delta_counts = {
     "BUN result 30 days after Contact_DATE": 2,
     "LDL result 30 days after Contact_DATE": 7,
     "Glucose result 30 days after Contact_DATE": 2,
@@ -25,8 +25,17 @@ opthafterdxdate = {
     "Sub-RPE 5mm OS": 121,
     "dist_fovea OD": 3,
     "Sub-RPE 5mm OD": 116,
+    "VA_Left_Pressure": 133,
+    "VA_Left_Distance_CC": 5147, 
+    "VA_Right_Pressure": 133,
+    "VA_Right_Distance_SC": 2541,
+    "VA_Left_Distance_SC":2782,
+    "VA_Right_Distance_CC": 4871
 }
 
+@pytest.fixture(scope="session", autouse=True)
+def mock_VA_sheet():
+    return pd.read_excel(os.path.join(DATA_DIRECTORY, "raw", "ccf_apellis_data_cleaning_summary_20231120.xlsx"), sheet_name="ophth after DXDate_11")
 
 @pytest.fixture(scope="session", autouse=True)
 def mock_pat_pop():
@@ -40,6 +49,13 @@ def mock_pat_pop():
 def mock_dxafterdxdate():
     try:
         return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate.csv"))
+    except:
+        return None
+
+@pytest.fixture(scope="session", autouse=True)
+def mock_ophthafterdxdate():
+    try:
+        return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "ophthafterdxdate.csv"))
     except:
         return None
 

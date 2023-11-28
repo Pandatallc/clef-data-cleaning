@@ -4,19 +4,24 @@ import pandas as pd
 
 from typing import List
 from etls.etl_helpers import (
+    date_to_blank,
     string_to_blank_save_date,
     string_to_blank_save_numeric,
+    try_str_to_date,
     try_str_to_float,
+    value_map,
 )
+from etls.sheets.va_cols import VARuleReader
 
 
 class PatpopScrub:
     """Logic for cleaning PatPop"""
 
     def __init__(self, col: Sequence, instructions: Mapping):
-        self.format = instructions["format"]
+        self.format = instructions.get("format")
         self.string_intention = instructions["string_intention"]
         self.vals_to_notes = instructions.get("vals_to_notes", None)
+        self.args = instructions.get("args", None)
         self.old_col = col.copy()
         self.notes_col_name = (
             f"{col.name}_notes" if instructions["string_intention"] != "blank" else None
@@ -26,7 +31,7 @@ class PatpopScrub:
 
     def _get_notes(self):
         """If there are notes, we want to create them before turning them to null, so this is part of the initialization."""
-        if self.string_intention != "blank":
+        if self.string_intention not in ["blank", "map"]:
             if self.format == "date":
                 return pd.Series(
                     [x if x in self.vals_to_notes else np.nan for x in self.old_col],
@@ -38,15 +43,15 @@ class PatpopScrub:
                         x if type(try_str_to_float(x)) == str else np.nan
                         for x in self.old_col
                     ],
-                    name=self.notes_col_name
+                    name=self.notes_col_name,
                 )
             else:
                 raise (
-                    ValueError(
+                    KeyError(
                         f"Cannot have string_intention 'notes' with format {self.format}"
                     )
                 )
-        if self.string_intention == "blank":
+        if self.string_intention in ["blank", "map"]:
             return None
 
     def clean(self) -> Tuple[Sequence, List[Sequence]]:
@@ -55,6 +60,29 @@ class PatpopScrub:
             ammended_col = string_to_blank_save_numeric(self.old_col)
         if self.format == "date":
             ammended_col = string_to_blank_save_date(self.old_col)
+        if self.string_intention == "map":
+            str_rules = VARuleReader(
+                self.args["sheet_name"],
+                self.args["str_head"],
+                self.args["str_tail"],
+                self.args["str_cols"],
+            )
+            try:
+                num_rules = VARuleReader(
+                    self.args["sheet_name"],
+                    self.args["num_head"],
+                    self.args["num_tail"],
+                    self.args["num_cols"],
+                )
+                col_map = num_rules.delta_dict() | str_rules.delta_dict()
+            except KeyError:
+                col_map=str_rules.delta_dict()
+            mapped_col = value_map(
+                self.old_col, col_map
+            )
+            ammended_col = pd.Series(date_to_blank(mapped_col), name=self.old_col.name)
+
+        ## Add notes column
         if self.notes is not None:
             return (self.old_col, [ammended_col, self.notes])
         else:
@@ -79,41 +107,44 @@ class DxAfterDxdateScrub:
         return (self.old_col, ammended_cols)
 
 
-class OpthafterDxDateScrub:
-    """Logic for cleaning OpthafterDxDate"""
+# class OpthafterDxDateScrub:
+#     """Logic for cleaning OpthafterDxDate"""
 
-    def __init__(self, col: Sequence, instructions: Mapping):
-        self.format = instructions["format"]
-        self.string_intention = instructions["string_intention"]
-        self.vals_to_notes = instructions.get("vals_to_notes", None)
-        self.old_col = col.copy()
-        self.notes_col_name = (
-            f"{col.name}_notes" if instructions["string_intention"] != "blank" else None
-        )
-        self.old_col_name = f"old_{col.name}"
-        self.notes = self._get_notes()
+#     def __init__(self, col: Sequence, instructions: Mapping):
+#         self.format = instructions["format"]
+#         self.string_intention = instructions["string_intention"]
+#         self.vals_to_notes = instructions.get("vals_to_notes", None)
+#         self.old_col = col.copy()
+#         self.notes_col_name = (
+#             f"{col.name}_notes" if instructions["string_intention"] != "blank" else None
+#         )
+#         self.old_col_name = f"old_{col.name}"
+#         self.notes = self._get_notes()
 
-    def _get_notes(self):
-        """If there are notes, we want to create them before turning them to null, so this is part of the initialization."""
-        if self.string_intention != "blank":
-            if self.format == "date":
-                return pd.Series(
-                    [x if x in self.vals_to_notes else np.nan for x in self.old_col],
-                    name=self.notes_col_name,
-                )
-            elif self.format == "numeric":
-                return pd.Series(
-                    [
-                        x if type(try_str_to_float(x)) == str else np.nan
-                        for x in self.old_col
-                    ],
-                    name=self.notes_col_name,
-                )
-            else:
-                raise (
-                    ValueError(
-                        f"Cannot have string_intention 'notes' with format {self.format}"
-                    )
-                )
-        if self.string_intention == "blank":
-            return None
+#     def _get_notes(self):
+#         """If there are notes, we want to create them before turning them to null, so this is part of the initialization."""
+#         if self.string_intention != "blank":
+#             if self.format == "date":
+#                 return pd.Series(
+#                     [x if x in self.vals_to_notes else np.nan for x in self.old_col],
+#                     name=self.notes_col_name,
+#                 )
+#             elif self.format == "numeric":
+#                 return pd.Series(
+#                     [
+#                         x if type(try_str_to_float(x)) == str else np.nan
+#                         for x in self.old_col
+#                     ],
+#                     name=self.notes_col_name,
+#                 )
+#             else:
+#                 raise (
+#                     ValueError(
+#                         f"Cannot have string_intention 'notes' with format {self.format}"
+#                     )
+#                 )
+#         if self.string_intention == "blank":
+#             return None
+
+#     def clean(self) -> Tuple[Sequence, List[Sequence]]:
+#         if

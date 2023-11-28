@@ -7,7 +7,9 @@ from tests.conftest import *
 
 class TestPatpopScrub:
     pat_pop_instructions = instructions["pat_pop"]
-    error_kv_list = [(k, v) for k, v in pat_pop_delta_counts.items()]
+    ophthafterdxdate_instructions = instructions["ophthafterdxdate"]
+    pat_pop_error_kv_list = [(k, v) for k, v in pat_pop_delta_counts.items()]
+    oad_error_kv_list = [(k, v) for k, v in opthafterdxdate_delta_counts.items()]
 
     def display_check(self, result):
         old_col = result[0]
@@ -31,9 +33,16 @@ class TestPatpopScrub:
         assert list(PatpopScrub(col, ins).notes) == expected
         assert PatpopScrub(col, ins).notes.name == f"{col_name}_notes"
 
-    @pytest.mark.parametrize("col_name,expected", error_kv_list)
+    @pytest.mark.parametrize("col_name,expected", pat_pop_error_kv_list)
     def test_clean_delta_counts(self, col_name, expected, mock_pat_pop):
         col = mock_pat_pop[col_name]
         ins = self.__class__.pat_pop_instructions[col_name]
+        diff = self.display_check(PatpopScrub(col, ins).clean())
+        assert len(diff) == expected
+
+    @pytest.mark.parametrize("col_name,expected", oad_error_kv_list)
+    def test_clean_delta_counts(self, col_name, expected, mock_ophthafterdxdate):
+        col = mock_ophthafterdxdate[col_name]
+        ins = self.__class__.ophthafterdxdate_instructions[col_name]
         diff = self.display_check(PatpopScrub(col, ins).clean())
         assert len(diff) == expected

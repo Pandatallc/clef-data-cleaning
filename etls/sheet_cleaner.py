@@ -24,8 +24,10 @@ class SheetCleaner:
                     ).clean()
                 elif self.sheet_name == "dxafterdxdate":
                     scrub_res = DxAfterDxdateScrub(self.raw[col]).clean()
-                elif self.sheet_name == "opthafterdxdate":
-                    scrub_res = OpthafterDxDateScrub(self.raw[col]).clean()
+                elif self.sheet_name == "ophthafterdxdate":
+                    scrub_res = PatpopScrub(
+                        self.raw[col], self.instructions[col]
+                    ).clean()
                 col_list += scrub_res[1]
             else:
                 col_list.append(self.raw[col])
