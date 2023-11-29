@@ -16,6 +16,13 @@ def try_str_to_float(val):
         return float(val)
     except:
         return val
+    
+
+def try_strip(x):
+    try:
+        return x.strip()
+    except:
+        return x
 
 
 def string_to_blank_save_numeric(col: Sequence) -> Sequence:
@@ -39,3 +46,5 @@ def value_map(col: Sequence, val_map: Mapping) -> Sequence:
     mapped_seq = [val_map.get(x, x) for x in col]
     new_seq = [np.nan if x == "Replace with blank" else x for x in mapped_seq]
     return pd.Series(new_seq, name=col.name)
+
+

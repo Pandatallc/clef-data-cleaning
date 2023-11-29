@@ -2,6 +2,7 @@ from numpy import NaN
 import os
 import pandas as pd
 import pytest
+from etls.etl_helpers import try_strip
 from etls.instructions import instructions
 
 DATA_DIRECTORY = os.path.join(os.path.dirname("__file__"), "data")
@@ -18,8 +19,8 @@ pat_pop_delta_counts = {
 opthafterdxdate_delta_counts = {
     "BUN result 30 days after Contact_DATE": 2,
     "LDL result 30 days after Contact_DATE": 7,
-    "Glucose result 30 days after Contact_DATE": 2,
-    "Serum Creatinine date 30 days after Contact_DATE": 4,
+    "Glucose result 30 days after Contact_DATE": 4146,
+    "Serum Creatinine result 30 days after Contact_DATE": 4,
     "cst_OS": 1,
     "dist_fovea OS": 1,
     "Sub-RPE 5mm OS": 121,
@@ -1538,7 +1539,7 @@ mock_oct_date_notes = [
     NaN,
 ]
 
-mock_sub_rpe_od_notes = [
+mock_sub_rpe_od_notes = [try_strip(x) for x in [
     NaN,
     NaN,
     "ONLY ONE IMAGE",
@@ -3009,4 +3010,4 @@ mock_sub_rpe_od_notes = [
     "LESS THAN ONE YEAR FOLLOW UP",
     "LESS THAN ONE YEAR FOLLOW UP",
     "LESS THAN ONE YEAR FOLLOW UP",
-]
+]]

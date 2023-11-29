@@ -9,9 +9,10 @@ from etls.etl_helpers import (
     string_to_blank_save_numeric,
     try_str_to_date,
     try_str_to_float,
+    try_strip,
     value_map,
 )
-from etls.sheets.va_cols import VARuleReader
+from etls.sheets.va_cols import VARuleReader, get_col_map
 
 
 class PatpopScrub:
@@ -22,11 +23,10 @@ class PatpopScrub:
         self.string_intention = instructions["string_intention"]
         self.vals_to_notes = instructions.get("vals_to_notes", None)
         self.args = instructions.get("args", None)
-        self.old_col = col.copy()
+        self.old_col = pd.Series([try_strip(x) for x in col], name = col.name)
         self.notes_col_name = (
             f"{col.name}_notes" if instructions["string_intention"] != "blank" else None
         )
-        self.old_col_name = f"old_{col.name}"
         self.notes = self._get_notes()
 
     def _get_notes(self):
@@ -61,22 +61,7 @@ class PatpopScrub:
         if self.format == "date":
             ammended_col = string_to_blank_save_date(self.old_col)
         if self.string_intention == "map":
-            str_rules = VARuleReader(
-                self.args["sheet_name"],
-                self.args["str_head"],
-                self.args["str_tail"],
-                self.args["str_cols"],
-            )
-            try:
-                num_rules = VARuleReader(
-                    self.args["sheet_name"],
-                    self.args["num_head"],
-                    self.args["num_tail"],
-                    self.args["num_cols"],
-                )
-                col_map = num_rules.delta_dict() | str_rules.delta_dict()
-            except KeyError:
-                col_map=str_rules.delta_dict()
+            col_map = get_col_map(args= self.args)
             mapped_col = value_map(
                 self.old_col, col_map
             )

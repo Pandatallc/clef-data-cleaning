@@ -25,8 +25,11 @@ instructions = {
         },
         "Glucose result 30 days after Contact_DATE": {
             "format": "numeric",
-            "string_intention": "blank",
+            "string_intention": "impute",
         },
+        "Serum Creatinine result 30 days after Contact_DATE":{"format":"numeric", "string_intention":"blank"},
+        "Estimated GFR result 30 days after Contact_DATE":{"format":"numeric", "string_intention": "impute"},
+        "C-reactive protein result 30 days after Contact_DATE": {"format":"numeric", "string_intention":"impute"},
         "cst_OS": {"format": "numeric", "string_intention": "blank"},
         "dist_fovea OS": {"format": "numeric", "string_intention": "blank"},
         "Sub-RPE 5mm OS": {"format": "numeric", "string_intention": "notes"},
