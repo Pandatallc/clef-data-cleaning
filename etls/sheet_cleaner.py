@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-from etls.sheets.pat_pop import DxAfterDxdateScrub, PatpopScrub
+from etls.sheets.pat_pop import BasicScrubber, FancyScrubber
 from .etl_helpers import *
 
 
@@ -22,9 +22,9 @@ class SheetCleaner:
                 f"Column '{col_name}' does not exist in sheet '{self.sheen_name}'."
             )
         if self.sheet_name in ["pat_pop", "ophthafterdxdate"]:
-            scrub_res = PatpopScrub(self.raw[col_name], self.instructions[col_name]).clean()
+            scrub_res = FancyScrubber(self.raw[col_name], self.instructions[col_name]).clean()
         else:
-            scrub_res = DxAfterDxdateScrub(self.raw[col_name]).clean()
+            scrub_res = BasicScrubber(self.raw[col_name]).clean()
         return scrub_res
 
     def get_clean_sheet(self):

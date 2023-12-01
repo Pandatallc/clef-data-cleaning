@@ -15,7 +15,7 @@ from etls.etl_helpers import (
 from etls.sheets.va_cols import VARuleReader, get_col_map_all
 
 
-class PatpopScrub:
+class FancyScrubber:
     """Logic for cleaning PatPop, and opthafterdxdate"""
 
     def __init__(self, col: Sequence, instructions: Mapping):
@@ -72,14 +72,14 @@ class PatpopScrub:
             if self.string_intention == "impute":
                 ammended_col = string_to_blank_save_numeric(ammended_col)
 
-        ## Add notes column
+        ## Add notes or imputation column
         if self.notes is not None:
             return (self.old_col, [ammended_col, self.notes])
         else:
             return (self.old_col, [ammended_col])
 
 
-class DxAfterDxdateScrub:
+class BasicScrubber:
     """Logic for cleaning DxAfterDxdate"""
 
     def __init__(self, col: Sequence):
