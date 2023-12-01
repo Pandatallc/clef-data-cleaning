@@ -36,7 +36,12 @@ class VARuleReader:
         # convert ints to str, for consistent mapping to column values
         df["Value"] = [try_int_to_str(x) for x in df["Value"]]
         # New total of occurences
-        clean_rules = pd.DataFrame(df.groupby(["Value", "Rule (to be defined by CCF team)"])["Occurences"].sum()).reset_index()
+        groupby_cols = ["Value", "Rule (to be defined by CCF team)"]
+        if df.shape[1] == 4:
+            groupby_cols = groupby_cols + ["Add'l notes"]
+        clean_rules = pd.DataFrame(
+            df.groupby(groupby_cols)["Occurences"].sum()
+        ).reset_index()
         return clean_rules
 
     def delta_dict(self) -> dict:
@@ -47,7 +52,8 @@ class VARuleReader:
 
     def rules_dict(self) -> dict:
         return {
-            row["Value"]: row["Rule (to be defined by CCF team)"] for i, row in self.rules.iterrows()
+            row["Value"]: row["Rule (to be defined by CCF team)"]
+            for i, row in self.rules.iterrows()
         }
 
     def occurances(self) -> dict:
@@ -57,11 +63,11 @@ class VARuleReader:
 def get_all_rules(args) -> pd.DataFrame:
     """A mapping dict for making str and num replacements"""
     str_rules = VARuleReader(
-                args["sheet_name"],
-                args["str_head"],
-                args["str_tail"],
-                args["str_cols"],
-            )
+        args["sheet_name"],
+        args["str_head"],
+        args["str_tail"],
+        args["str_cols"],
+    )
     try:
         num_rules = VARuleReader(
             args["sheet_name"],
@@ -70,40 +76,24 @@ def get_all_rules(args) -> pd.DataFrame:
             args["num_cols"],
         )
         all_rules = pd.concat([str_rules.rules, num_rules.rules])
-        clean_rules = pd.DataFrame(all_rules.groupby(["Value", "Rule (to be defined by CCF team)"])["Occurences"].sum()).reset_index()
+        clean_rules = pd.DataFrame(
+            all_rules.groupby(["Value", "Rule (to be defined by CCF team)"])[
+                "Occurences"
+            ].sum()
+        ).reset_index()
     except KeyError:
         clean_rules = str_rules.rules
     return clean_rules
-    
 
-def get_col_map_deltas(args) -> dict:
-    """A mapping dict for making str and num replacements"""
-    str_rules = VARuleReader(
-                args["sheet_name"],
-                args["str_head"],
-                args["str_tail"],
-                args["str_cols"],
-            )
-    try:
-        num_rules = VARuleReader(
-            args["sheet_name"],
-            args["num_head"],
-            args["num_tail"],
-            args["num_cols"],
-        )
-        col_map = num_rules.delta_dict() | str_rules.delta_dict()
-    except KeyError:
-        col_map=str_rules.delta_dict()
-    return col_map
 
 def get_col_map_all(args) -> dict:
     """A mapping dict for making str and num replacements"""
     str_rules = VARuleReader(
-                args["sheet_name"],
-                args["str_head"],
-                args["str_tail"],
-                args["str_cols"],
-            )
+        args["sheet_name"],
+        args["str_head"],
+        args["str_tail"],
+        args["str_cols"],
+    )
     try:
         num_rules = VARuleReader(
             args["sheet_name"],
@@ -113,7 +103,5 @@ def get_col_map_all(args) -> dict:
         )
         col_map = num_rules.rules_dict() | str_rules.rules_dict()
     except KeyError:
-        col_map=str_rules.rules_dict()
+        col_map = str_rules.rules_dict()
     return col_map
-
-

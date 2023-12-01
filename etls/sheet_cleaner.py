@@ -9,7 +9,7 @@ class SheetCleaner:
     """An object that represents the Sheet and the process parameters for its cleaning. [patpop, ophthafterdxdate, dxaferdxdate, others]"""
 
     def __init__(self, sheet_name: str, instructions: dict):
-        """sheet_name will determine the Scrubbing logic to follow, 
+        """sheet_name will determine the Scrubbing logic to follow,
         the instructions will indicate the parameters for the scrubbing."""
         self.sheet_name = sheet_name
         self.instructions = instructions.get(sheet_name, None)
@@ -18,11 +18,13 @@ class SheetCleaner:
 
     def clean_col(self, col_name):
         if col_name not in self.column_names:
-            raise KeyError(f"Column '{col_name}' does not exist in sheet '{self.sheen_name}'.")
+            raise KeyError(
+                f"Column '{col_name}' does not exist in sheet '{self.sheen_name}'."
+            )
         if self.sheet_name in ["pat_pop", "ophthafterdxdate"]:
-            scrub_res = PatPopScrub(self.raw[col], self.instructions[col]).clean()
+            scrub_res = PatpopScrub(self.raw[col_name], self.instructions[col_name]).clean()
         else:
-            scrub_res = DxAfterDxdateScrub(self.raw[col]).clean()
+            scrub_res = DxAfterDxdateScrub(self.raw[col_name]).clean()
         return scrub_res
 
     def get_clean_sheet(self):

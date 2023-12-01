@@ -20,5 +20,5 @@ if __name__ == "__main__":
 
     ## clean ophth after dxdate
     s = SheetCleaner("ophthafterdxdate", instructions)
-    df = s.get_clean()
+    df = s.get_clean_sheet()
     df.to_csv("data/processed/ophthafterdxdate_revised.csv")

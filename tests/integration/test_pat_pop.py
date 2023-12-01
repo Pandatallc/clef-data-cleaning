@@ -1,6 +1,5 @@
 import pytest
 from etls.sheets.pat_pop import PatpopScrub
-from etls.sheets.va_cols import get_occs
 from etls.instructions import instructions
 
 from tests.conftest import *
@@ -10,20 +9,23 @@ class TestPatpopScrub:
     pat_pop_instructions = instructions["pat_pop"]
     ophthafterdxdate_instructions = instructions["ophthafterdxdate"]
     pat_pop_error_kv_list = [(k, v) for k, v in pat_pop_delta_counts.items()]
-    oad_error_kv_list_normal = [(k, v) for k, v in opthafterdxdate_delta_counts.items() if "VA" not in k]
-    oad_error_kv_list_va = [(k, v) for k, v in opthafterdxdate_delta_counts.items() if "VA" in k]
-    
+    oad_error_kv_list_normal = [
+        (k, v) for k, v in opthafterdxdate_delta_counts.items() if "VA" not in k
+    ]
+    oad_error_kv_list_va = [
+        (k, v) for k, v in opthafterdxdate_delta_counts.items() if "VA" in k
+    ]
 
-    def mod_expected(self, df, col_name, rules, expected):
-        rules_merge = pd.merge(rules, df[[col_name]], left_on=["Value"], right_on=[col_name], how="left")
-        rules_merge["actual_occurences"] = rules_merge.groupby(col_name)[col_name].transform("size")
-        mis_match = rules_merge[rules_merge["Occurences"] != rules_merge["actual_occurences"]]
-        dups_dropped = mis_match.drop_duplicates(subset=["Value"])
-        nan_count = sum(dups_dropped[dups_dropped["Value"].isnull()]["Occurences"])
-        occ_diff = dups_dropped[~dups_dropped["Value"].isnull() & ~dups_dropped['actual_occurences'].isnull()]
-        act_minus_exp = sum(occ_diff["actual_occurences"]) - sum(occ_diff["Occurences"])
+    # def mod_expected(self, df, col_name, rules, expected):
+    #     rules_merge = pd.merge(rules, df[[col_name]], left_on=["Value"], right_on=[col_name], how="left")
+    #     rules_merge["actual_occurences"] = rules_merge.groupby(col_name)[col_name].transform("size")
+    #     mis_match = rules_merge[rules_merge["Occurences"] != rules_merge["actual_occurences"]]
+    #     dups_dropped = mis_match.drop_duplicates(subset=["Value"])
+    #     nan_count = sum(dups_dropped[dups_dropped["Value"].isnull()]["Occurences"])
+    #     occ_diff = dups_dropped[~dups_dropped["Value"].isnull() & ~dups_dropped['actual_occurences'].isnull()]
+    #     act_minus_exp = sum(occ_diff["actual_occurences"]) - sum(occ_diff["Occurences"])
 
-        return expected + act_minus_exp - nan_count
+    #     return expected + act_minus_exp - nan_count
 
     def display_check(self, result):
         old_col = result[0]
@@ -65,7 +67,5 @@ class TestPatpopScrub:
     def test_va_oad_delta_counts(self, col_name, expected, mock_ophthafterdxdate):
         col = mock_ophthafterdxdate[col_name]
         ins = self.__class__.ophthafterdxdate_instructions[col_name]
-        rules = get_occs(ins["args"])
         diff = self.display_check(PatpopScrub(col, ins).clean())
-        mod_exp  = self.mod_expected(mock_ophthafterdxdate, col_name, rules, expected)
-        assert len(diff) == mod_exp
+        assert len(diff) == expected
