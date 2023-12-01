@@ -12,18 +12,19 @@ from etls.etl_helpers import (
     try_strip,
     value_map,
 )
-from etls.sheets.va_cols import VARuleReader, get_col_map
+from etls.sheets.va_cols import VARuleReader, get_col_map_all
 
 
 class PatpopScrub:
-    """Logic for cleaning PatPop"""
+    """Logic for cleaning PatPop, and opthafterdxdate"""
 
     def __init__(self, col: Sequence, instructions: Mapping):
         self.format = instructions.get("format")
         self.string_intention = instructions["string_intention"]
         self.vals_to_notes = instructions.get("vals_to_notes", None)
         self.args = instructions.get("args", None)
-        self.old_col = pd.Series([try_strip(x) for x in col], name = col.name)
+        self.col_name = col.name
+        self.old_col = pd.Series([try_strip(x) for x in col], name = f"old_{col.name}")
         self.notes_col_name = (
             f"{col.name}_notes" if instructions["string_intention"] != "blank" else None
         )
@@ -61,11 +62,11 @@ class PatpopScrub:
         if self.format == "date":
             ammended_col = string_to_blank_save_date(self.old_col)
         if self.string_intention == "map":
-            col_map = get_col_map(args= self.args)
+            col_map = get_col_map_all(args = self.args)
             mapped_col = value_map(
                 self.old_col, col_map
             )
-            ammended_col = pd.Series(date_to_blank(mapped_col), name=self.old_col.name)
+            ammended_col = pd.Series(date_to_blank(mapped_col), name=self.col_name)
 
         ## Add notes column
         if self.notes is not None:
