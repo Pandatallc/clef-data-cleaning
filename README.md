@@ -47,7 +47,7 @@ python clef.py make_workbook
 ```
 
 ## Run script to generate clean sheet (saved to `processed` folder)i
-- Format is: <python> <module> <function> <args>
+- Format is: `python` `module` `function` `args`
 - Args can be [pat_pop, dxafterdxdate, ophthafterdxdate, alldxatfirstdxdate, allmeds] 
 ```bash
 python clef.py make_sheet pat_pop
