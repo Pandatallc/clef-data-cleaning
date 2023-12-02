@@ -1,5 +1,5 @@
 import pytest
-from etls.sheets.pat_pop import FancyScrubber
+from etls.sheets.scrubbers import FancyScrubber
 from etls.instructions import instructions
 
 from tests.conftest import *
@@ -33,6 +33,7 @@ class TestFancyScrubErrCounts:
         [("OCT_DATE", mock_oct_date_notes), ("Sub-RPE 5mm OD", mock_sub_rpe_od_notes)],
     )
     def test__get_notes(self, col_name, expected, mock_pat_pop):
+        """Tests that additional notes columns are created as expected."""
         col = mock_pat_pop[col_name]
         ins = self.__class__.pat_pop_instructions[col_name]
         assert list(FancyScrubber(col, ins).notes) == expected
@@ -40,6 +41,7 @@ class TestFancyScrubErrCounts:
 
     @pytest.mark.parametrize("col_name,expected", pat_pop_error_kv_list)
     def test_pat_pop_delta_counts(self, col_name, expected, mock_pat_pop):
+        """Check that the intended number of columns were affected in patpop"""
         col = mock_pat_pop[col_name]
         ins = self.__class__.pat_pop_instructions[col_name]
         diff = self.display_check(FancyScrubber(col, ins).clean())
@@ -47,6 +49,7 @@ class TestFancyScrubErrCounts:
 
     @pytest.mark.parametrize("col_name,expected", oad_error_kv_list_normal)
     def test_normal_oad_delta_counts(self, col_name, expected, mock_ophthafterdxdate):
+        """Check that the intended number of columns were affected among the non-visual accuity fields in ophthafterdxdate"""
         col = mock_ophthafterdxdate[col_name]
         ins = self.__class__.ophthafterdxdate_instructions[col_name]
         diff = self.display_check(FancyScrubber(col, ins).clean())
@@ -54,6 +57,7 @@ class TestFancyScrubErrCounts:
 
     @pytest.mark.parametrize("col_name,expected", oad_error_kv_list_va)
     def test_va_oad_delta_counts(self, col_name, expected, mock_ophthafterdxdate):
+        """Check that the intended number of columns were affected amongh the visual accuity fields in ophthafterdxdate"""
         col = mock_ophthafterdxdate[col_name]
         ins = self.__class__.ophthafterdxdate_instructions[col_name]
         diff = self.display_check(FancyScrubber(col, ins).clean())

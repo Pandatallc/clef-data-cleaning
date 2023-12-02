@@ -69,26 +69,32 @@ instructions = {
         "Chloride result 30 days after Contact_DATE": {
             "format": "numeric",
             "string_intention": "map",
-            "args": {"sheet_name": "ophth after DXDate_19",
-                     "str_head": 31,
-                     "str_tail": 3,
-                     "str_cols": "A:C"}
+            "args": {
+                "sheet_name": "ophth after DXDate_19",
+                "str_head": 31,
+                "str_tail": 3,
+                "str_cols": "A:C",
+            },
         },
         "Potassium result 30 days after Contact_DATE": {
             "format": "numeric",
             "string_intention": "map",
-            "args": {"sheet_name": "ophth after DXDate_24",
-                     "str_head": 31,
-                     "str_tail": 7,
-                     "str_cols": "A:C"}
+            "args": {
+                "sheet_name": "ophth after DXDate_24",
+                "str_head": 31,
+                "str_tail": 7,
+                "str_cols": "A:C",
+            },
         },
         "Sodium result 30 days after Contact_DATE": {
             "format": "numeric",
             "string_intention": "map",
-            "args": {"sheet_name": "ophth after DXDate_26",
-                     "str_head": 31,
-                     "str_tail": 4,
-                     "str_cols": "A:C"}
+            "args": {
+                "sheet_name": "ophth after DXDate_26",
+                "str_head": 31,
+                "str_tail": 4,
+                "str_cols": "A:C",
+            },
         },
         "VA_Left_Distance_CC": {
             "format": "string",
@@ -162,5 +168,9 @@ instructions = {
                 "str_cols": "A:C",
             },
         },
+    },
+    "alldxatfirstdxdate": {
+        "CURRENT_ICD9_LIST": {"format": "string", "string_intention": "split"},
+        "CURRENT_ICD10_LIST": {"format": "string", "string_intention": "split"},
     },
 }

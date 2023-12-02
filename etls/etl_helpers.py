@@ -49,7 +49,10 @@ def value_map(col: Sequence, val_map: Mapping[str, Any]) -> Sequence:
     In our case, we can expect all keys in our dictionary to be strings."""
     date_zoot = date_to_blank(col)
     mapped_seq = [val_map.get(try_int_to_str(x), x) for x in date_zoot]
-    new_seq = [np.nan if x in ["Change to blank", "Replace with blank"] else x for x in mapped_seq]
+    new_seq = [
+        np.nan if x in ["Change to blank", "Replace with blank"] else x
+        for x in mapped_seq
+    ]
     return pd.Series(new_seq, name=col.name)
 
 

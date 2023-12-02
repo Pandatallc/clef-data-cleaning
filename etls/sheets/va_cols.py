@@ -6,7 +6,12 @@ from etls.etl_helpers import try_strip, try_int_to_str
 
 
 class VARuleReader:
-    """Represents data in an excel sheet."""
+    """Represents Visual Accuity Rule reader, reads lookup table for rules.
+    Important to remember this performs light cleaning for the consistency of lookups
+     - strip whitespace
+     - turn empty string col to nan
+     - convert integers to strings
+    """
 
     def __init__(self, sheet_name: str, head: int, tail: int, cols: str):
         self.sheet_name = sheet_name
@@ -20,7 +25,7 @@ class VARuleReader:
 
     def _get_clean_rules(self):
         """Reads rules and strips whitespace from Values, converts numeric to string for easier look up"""
-        fp = Path("data", "raw", "ccf_apellis_data_cleaning_summary_20231120.xlsx")
+        fp = Path("data", "raw", "ccf_apellis_data_cleaning_summary_20231201.xlsx")
         if not os.path.exists(fp):
             fp = Path("..", fp)
 

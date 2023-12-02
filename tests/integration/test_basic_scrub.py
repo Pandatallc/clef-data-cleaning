@@ -1,5 +1,5 @@
 import pytest
-from etls.sheets.pat_pop import BasicScrubber
+from etls.sheets.scrubbers import BasicScrubber
 from etls.instructions import instructions
 
 from tests.conftest import *
@@ -19,6 +19,7 @@ class TestBasicScrub:
         return diff
 
     def test_clean_delta_counts(self, mock_dxafterdxdate):
+        """High level check that the intended number of columns were affected"""
         col_name = "CURRENT_ICD9_LIST"
         col = mock_dxafterdxdate[col_name]
         diff = self.display_check(BasicScrubber(col).clean())
