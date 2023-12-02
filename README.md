@@ -1,13 +1,5 @@
-# clef-data-cleaning
-Clef needs data cleaning.
-***
-The first sheet is PAT_POP.
-The recipe needed for PAT_POP can be found in `etls/instructions.py`
-- "format"
-- "string_intention"
-- Optional["val_to_notes"]
-
-And to achieve test coverage, we rely on delta counts obtained from the data_cleaning_summary .xlsx file.
+# :musical_score:CLEF
+Data cleaning parameters per column: `etls/instructions.py`
 
 ***
 ## Set up environment 
