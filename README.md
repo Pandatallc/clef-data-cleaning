@@ -19,7 +19,7 @@ pip install -r requirements.txt
 ```
 Manual steps
 1. Create a data folder in the root directory
-```
+```python
 ├── data
 │   ├── raw
 │   │   ├── ccf_apellis_data_cleaning_summary_20231120.xlsx
@@ -30,7 +30,7 @@ Manual steps
 |   |   ├── dxafterdxdate.csv
 |   |   ├── ophthafterdxdate.csv
 |   |   ├── pat_pop.csv
-│   ├── processed
+│   ├── processed   # to be produced by CLEF 
 |   |   ├── alldxatfirstdxdate_revised.csv
 |   |   ├── dxafterdxdate_revised.csv
 |   |   ├── ophthafterdxdate_revised.csv
