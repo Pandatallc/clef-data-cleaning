@@ -43,6 +43,17 @@ def date_to_blank(col: Sequence) -> Sequence:
     result = [np.nan if type(try_str_to_date(x)) == datetime.date else x for x in col]
     return pd.Series(result, name=col.name)
 
+def try_make_numeric(x):
+    try:
+        if "." in x:
+            return float(x)
+        return int(x)
+    except:
+        return x
+    
+def numeric_col(col: Sequence) -> Sequence:
+    result = [try_make_numeric(x) for x in col]
+    return pd.Series(result, name= col.name)
 
 def value_map(col: Sequence, val_map: Mapping[str, Any]) -> Sequence:
     """Maps values in a sequence to keys in a dictionary.

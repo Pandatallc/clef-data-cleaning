@@ -38,16 +38,18 @@ Manual steps
 python clef.py make_workbook
 ```
 ```bash
-:basket: Exported Workbook of Clean Sheets
+[Out]
+> :basket: Exported Workbook of Clean Sheets
 ```
 
-## Run script to generate clean sheet (saved to `processed` folder)i
+## Run script to generate clean sheet (saved to `processed` folder)
 - Format is: `python` `module` `function` `args`
 - Args can be [pat_pop, dxafterdxdate, ophthafterdxdate, alldxatfirstdxdate, allmeds] 
 ```bash
 python clef.py make_sheet pat_pop
 ```
 ```bash
-:basket: Exported clean sheet as .csv in data/processed directory
+[Out]
+> :basket: Exported clean sheet as .csv in data/processed directory
 ```
 :metal: Thanks for using :musical_score:CLEF

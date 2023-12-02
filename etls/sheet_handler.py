@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from typing import Tuple
+from typing import List, Tuple
 
 from etls.sheets.scrubbers import BasicScrubber, FancyScrubber
 from .etl_helpers import *
@@ -20,7 +20,7 @@ class SheetHandler:
 
     def _get_raw(self):
         try:
-            return pd.read_csv(f"data/interim/{self.sheet_name}.csv", low_memory=False)
+            return pd.read_csv(f"data/interim/{self.clef_sheet_name}.csv", low_memory=False)
         except FileNotFoundError:
             raw = pd.read_excel(
                 "../data/raw/MASTER FILE.xlsx",
@@ -33,7 +33,7 @@ class SheetHandler:
             raw.to_csv(f"../data/interim/{self.sheet_name}.csv", index=False)
             return raw
 
-    def clean_col(self, col_name):
+    def clean_col(self, col_name) -> Tuple[Sequence, List]:
         if col_name not in self.column_names:
             raise KeyError(
                 f"Column '{col_name}' does not exist in sheet '{self.sheet_name}'."
@@ -52,7 +52,11 @@ class SheetHandler:
         for col in self.column_names:  # List[Str]
             if col in self.instructions:
                 scrub_res = self.clean_col(col)
-                col_list += scrub_res[1]
+                format= self.instructions.get(col).get("format")
+                if format == "numeric":
+                    scrub_res[1][0] = numeric_col(scrub_res[1][0])
+                else:
+                    col_list += scrub_res[1]
             else:
                 col_list.append(self.raw[col])
         return pd.DataFrame(col_list).T
