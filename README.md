@@ -37,8 +37,10 @@ Manual steps
 |   |   ├── pat_pop_revised.csv
 ```
 
- 2. Configure pytest with your IDE (Optional)
+ 2. Configure pytest with your IDE
  3. Make sure code is pointed at the correct version of data_cleaning_summary. 
+    - edit .conftest to reflect new delta counts
+    - edit [`etls.sheets.va_cols.py L28`](https://github.com/Pandatallc/clef-data-cleaning/blob/feature/CLEF-003_clean_ophthafterdxdate/etls/sheets/va_cols.py#L28)
 ## Run script to generate workbook of cleaned sheets
 ```bash
 python clef.py make_workbook
