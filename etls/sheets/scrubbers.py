@@ -4,48 +4,58 @@ import pandas as pd
 
 from typing import List
 from etls.etl_helpers import (
+    date_to_blank,
     string_to_blank_save_date,
     string_to_blank_save_numeric,
     try_str_to_float,
+    try_strip,
+    value_map,
 )
+from etls.sheets.va_cols import VARuleReader, get_col_map_all
 
 
-class PatpopScrub:
-    """Logic for cleaning PatPop"""
+class FancyScrubber:
+    """Logic for cleaning PatPop, and opthafterdxdate"""
 
     def __init__(self, col: Sequence, instructions: Mapping):
-        self.format = instructions["format"]
+        self.format = instructions.get("format")
         self.string_intention = instructions["string_intention"]
         self.vals_to_notes = instructions.get("vals_to_notes", None)
-        self.old_col = col.copy()
-        self.notes_col_name = (
-            f"{col.name}_notes" if instructions["string_intention"] != "blank" else None
-        )
-        self.old_col_name = f"old_{col.name}"
+        self.args = instructions.get("args", None)
+        self.col_name = col.name
+        self.old_col = pd.Series([try_strip(x) for x in col], name=f"old_{col.name}")
         self.notes = self._get_notes()
 
     def _get_notes(self):
         """If there are notes, we want to create them before turning them to null, so this is part of the initialization."""
-        if self.string_intention != "blank":
+        if self.string_intention == "impute":
+            delta_dict = get_col_map_all(self.args)
+            return pd.Series(
+                [x if x in delta_dict.keys() else np.nan for x in self.old_col],
+                name=f"impute_{self.col_name}",
+            )
+        new_col_name = f"{self.col_name}_notes"
+        if self.string_intention not in ["blank", "map"]:
             if self.format == "date":
                 return pd.Series(
                     [x if x in self.vals_to_notes else np.nan for x in self.old_col],
-                    name=self.notes_col_name,
+                    name=new_col_name,
                 )
             elif self.format == "numeric":
                 return pd.Series(
                     [
                         x if type(try_str_to_float(x)) == str else np.nan
                         for x in self.old_col
-                    ]
+                    ],
+                    name=new_col_name,
                 )
             else:
                 raise (
-                    ValueError(
+                    KeyError(
                         f"Cannot have string_intention 'notes' with format {self.format}"
                     )
                 )
-        if self.string_intention == "blank":
+        if self.string_intention in ["blank", "map"]:
             return None
 
     def clean(self) -> Tuple[Sequence, List[Sequence]]:
@@ -54,13 +64,21 @@ class PatpopScrub:
             ammended_col = string_to_blank_save_numeric(self.old_col)
         if self.format == "date":
             ammended_col = string_to_blank_save_date(self.old_col)
+        if self.string_intention in ["map", "impute"]:
+            col_map = get_col_map_all(args=self.args)
+            mapped_col = value_map(self.old_col, col_map)
+            ammended_col = pd.Series(date_to_blank(mapped_col), name=self.col_name)
+            if self.string_intention == "impute":
+                ammended_col = string_to_blank_save_numeric(ammended_col)
+
+        ## Add notes or imputation column
         if self.notes is not None:
             return (self.old_col, [ammended_col, self.notes])
         else:
             return (self.old_col, [ammended_col])
 
 
-class DxAfterDxdateScrub:
+class BasicScrubber:
     """Logic for cleaning DxAfterDxdate"""
 
     def __init__(self, col: Sequence):
