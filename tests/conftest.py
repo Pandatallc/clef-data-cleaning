@@ -38,6 +38,7 @@ opthafterdxdate_delta_counts = {
     "Estimated GFR result 30 days after Contact_DATE": 7908,
 }
 
+
 def mock_VA_sheet():
     return pd.read_excel(
         os.path.join(
@@ -50,7 +51,9 @@ def mock_VA_sheet():
 @pytest.fixture(scope="session", autouse=True)
 def mock_pat_pop():
     try:
-        return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "pat_pop.csv"), low_memory=False)
+        return pd.read_csv(
+            os.path.join(DATA_DIRECTORY, "interim", "pat_pop.csv"), low_memory=False
+        )
     except:
         return None
 
@@ -58,7 +61,10 @@ def mock_pat_pop():
 @pytest.fixture(scope="session", autouse=True)
 def mock_dxafterdxdate():
     try:
-        return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate.csv"), low_memory=False)
+        return pd.read_csv(
+            os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate.csv"),
+            low_memory=False,
+        )
     except:
         return None
 
@@ -67,7 +73,8 @@ def mock_dxafterdxdate():
 def mock_ophthafterdxdate():
     try:
         return pd.read_csv(
-            os.path.join(DATA_DIRECTORY, "interim", "ophthafterdxdate.csv"), low_memory=False
+            os.path.join(DATA_DIRECTORY, "interim", "ophthafterdxdate.csv"),
+            low_memory=False,
         )
     except:
         return None

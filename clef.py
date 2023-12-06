@@ -43,6 +43,16 @@ def make_sheet(sheet):
     clean_sheet.to_csv(f"data/processed/{sheet}_revised.csv")
     logger.info("\N{basket} Exported clean sheet as .csv in data/processed directory.")
 
+def refresh_all():
+    with ExcelWriter(Path("data", "processed", "CLEAN_MASTER_FILE.xlsx")) as writer:
+        for sheet_name in sheet_names.values():
+            s = SheetHandler(sheet_name, instructions)
+            clean_sheet = s.get_clean_sheet()
+            clean_sheet.to_csv(f"data/processed/{sheet_name[0]}_revised.csv")
+            clean_sheet.to_excel(writer, sheet_name=f"{sheet_name[1]}", index=False)
+    logger.info("\N{basket} Exported Workbook with Clean Sheets")
+ 
+
 
 if __name__ == "__main__":
     args = sys.argv

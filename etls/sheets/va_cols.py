@@ -25,7 +25,7 @@ class VARuleReader:
 
     def _get_clean_rules(self):
         """Reads rules and strips whitespace from Values, converts numeric to string for easier look up"""
-        fp = Path("data", "raw", "ccf_apellis_data_cleaning_summary_20231201.xlsx")
+        fp = Path("data", "raw", "ccf_apellis_data_cleaning_summary_20231205.xlsx")
         if not os.path.exists(fp):
             fp = Path("..", fp)
 
@@ -44,9 +44,14 @@ class VARuleReader:
         groupby_cols = ["Value", "Rule (to be defined by CCF team)"]
         if df.shape[1] == 4:
             groupby_cols = groupby_cols + ["Add'l notes"]
-        clean_rules = pd.DataFrame(
-            df.groupby(groupby_cols)["Occurences"].sum()
-        ).reset_index()
+        try:
+            clean_rules = pd.DataFrame(
+                df.groupby(groupby_cols)["Occurences"].sum()
+            ).reset_index()
+        except KeyError:
+            clean_rules= pd.DataFrame(
+                df.groupby(groupby_cols)["Occurrences"].sum().reset_index()
+            )
         return clean_rules
 
     def delta_dict(self) -> dict:

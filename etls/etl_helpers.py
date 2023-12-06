@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import datetime
-from typing import Mapping, Sequence, Any
+from typing import List, Mapping, Sequence, Any
 
 
 def try_str_to_date(val):
@@ -43,6 +43,18 @@ def date_to_blank(col: Sequence) -> Sequence:
     result = [np.nan if type(try_str_to_date(x)) == datetime.date else x for x in col]
     return pd.Series(result, name=col.name)
 
+
+def split_cols(col: Sequence, col_name: str) -> List[Sequence]:
+    """"""
+    ammended_cols_df = col.str.split(", ", expand=True)
+    ammended_cols = []
+    for i in ammended_cols_df.columns:
+        ammended_col = ammended_cols_df[i].copy()
+        ammended_col.name = f"{col_name}_{i+1}"
+        ammended_cols.append(ammended_col)
+    return ammended_cols
+
+
 def try_make_numeric(x):
     try:
         if "." in x:
@@ -50,10 +62,12 @@ def try_make_numeric(x):
         return int(x)
     except:
         return x
-    
+
+
 def numeric_col(col: Sequence) -> Sequence:
     result = [try_make_numeric(x) for x in col]
-    return pd.Series(result, name= col.name)
+    return pd.Series(result, name=col.name)
+
 
 def value_map(col: Sequence, val_map: Mapping[str, Any]) -> Sequence:
     """Maps values in a sequence to keys in a dictionary.

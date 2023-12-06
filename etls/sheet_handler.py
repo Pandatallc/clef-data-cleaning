@@ -20,7 +20,9 @@ class SheetHandler:
 
     def _get_raw(self):
         try:
-            return pd.read_csv(f"data/interim/{self.clef_sheet_name}.csv", low_memory=False)
+            return pd.read_csv(
+                f"data/interim/{self.clef_sheet_name}.csv", low_memory=False
+            )
         except FileNotFoundError:
             raw = pd.read_excel(
                 "../data/raw/MASTER FILE.xlsx",
@@ -52,7 +54,7 @@ class SheetHandler:
         for col in self.column_names:  # List[Str]
             if col in self.instructions:
                 scrub_res = self.clean_col(col)
-                format= self.instructions.get(col).get("format")
+                format = self.instructions.get(col).get("format")
                 if format == "numeric":
                     scrub_res[1][0] = numeric_col(scrub_res[1][0])
                 else:

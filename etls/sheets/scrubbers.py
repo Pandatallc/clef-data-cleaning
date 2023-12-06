@@ -5,6 +5,7 @@ import pandas as pd
 from typing import List
 from etls.etl_helpers import (
     date_to_blank,
+    split_cols,
     string_to_blank_save_date,
     string_to_blank_save_numeric,
     try_str_to_float,
@@ -34,8 +35,11 @@ class FancyScrubber:
                 [x if x in delta_dict.keys() else np.nan for x in self.old_col],
                 name=f"impute_{self.col_name}",
             )
+        if self.string_intention == "split":
+            return split_cols(self.old_col, self.col_name)
+
         new_col_name = f"{self.col_name}_notes"
-        if self.string_intention not in ["blank", "map"]:
+        if self.string_intention not in ["blank", "map", "split"]:
             if self.format == "date":
                 return pd.Series(
                     [x if x in self.vals_to_notes else np.nan for x in self.old_col],
@@ -55,7 +59,7 @@ class FancyScrubber:
                         f"Cannot have string_intention 'notes' with format {self.format}"
                     )
                 )
-        if self.string_intention in ["blank", "map"]:
+        if self.string_intention in ["blank", "map", "split"]:
             return None
 
     def clean(self) -> Tuple[Sequence, List[Sequence]]:
@@ -72,6 +76,8 @@ class FancyScrubber:
                 ammended_col = string_to_blank_save_numeric(ammended_col)
 
         ## Add notes or imputation column
+        if self.string_intention == "split":
+            return (self.old_col, self.notes)
         if self.notes is not None:
             return (self.old_col, [ammended_col, self.notes])
         else:
