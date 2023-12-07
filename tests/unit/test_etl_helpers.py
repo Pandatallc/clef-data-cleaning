@@ -18,22 +18,26 @@ def test_try_str_to_float(val, expected):
 
 
 def test_string_to_blank_save_numeric():
-    val = pd.Series(["hi", "", "4.6", 4.6])
+    val = pd.Series(["hi", "", "4.6", 4.6], name="old_hello")
+    res = string_to_blank_save_numeric(val)
     assert (
         len(
-            string_to_blank_save_numeric(val).compare(pd.Series([NaN, NaN, "4.6", 4.6]))
+            res.compare(pd.Series([NaN, NaN, "4.6", 4.6]))
         )
         == 0
     )
+    assert res.name == "hello"
 
 
 def test_string_to_blank_save_date():
-    val = pd.Series(["2019-08-28 00:00:00", "", "4.6", 4.6])
+    val = pd.Series(["2019-08-28 00:00:00", "", "4.6", 4.6], name="old_Hello")
+    res = string_to_blank_save_date(val)
     assert (
         len(
-            string_to_blank_save_date(val).compare(
+            res.compare(
                 pd.Series(["2019-08-28 00:00:00", NaN, NaN, 4.6])
             )
         )
         == 0
     )
+    assert res.name == "Hello"

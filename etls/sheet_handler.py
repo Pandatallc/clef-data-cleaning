@@ -55,8 +55,9 @@ class SheetHandler:
             if col in self.instructions:
                 scrub_res = self.clean_col(col)
                 format = self.instructions.get(col).get("format")
-                if format == "numeric":
+                if format == "numeric" or (format == "string" and self.instructions.get(col).get("string_intention")=="impute"):
                     scrub_res[1][0] = numeric_col(scrub_res[1][0])
+                    col_list += scrub_res[1]
                 else:
                     col_list += scrub_res[1]
             else:

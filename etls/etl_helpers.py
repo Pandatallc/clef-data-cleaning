@@ -30,13 +30,15 @@ def try_strip(x):
 def string_to_blank_save_numeric(col: Sequence) -> Sequence:
     """Converts all values of type str to NaN. Keeps numeric strings."""
     result = [np.nan if type(try_str_to_float(x)) == str else x for x in col]
-    return pd.Series(result, name=col.name)
+    col_name = col.name.replace("old_", "")
+    return pd.Series(result, name=col_name)
 
 
 def string_to_blank_save_date(col: Sequence) -> Sequence:
     """Converts all values of type str to NaN. Keeps dates strings."""
     result = [np.nan if type(try_str_to_date(x)) == str else x for x in col]
-    return pd.Series(result, name=col.name)
+    col_name = col.name.replace("old_", "")
+    return pd.Series(result, name=col_name)
 
 
 def date_to_blank(col: Sequence) -> Sequence:
@@ -50,7 +52,7 @@ def split_cols(col: Sequence, col_name: str) -> List[Sequence]:
     ammended_cols = []
     for i in ammended_cols_df.columns:
         ammended_col = ammended_cols_df[i].copy()
-        ammended_col.name = f"{col_name}_{i+1}"
+        ammended_col.name = f"{col_name}_{i+1}" #rename with underscore
         ammended_cols.append(ammended_col)
     return ammended_cols
 

@@ -25,7 +25,7 @@ class VARuleReader:
 
     def _get_clean_rules(self):
         """Reads rules and strips whitespace from Values, converts numeric to string for easier look up"""
-        fp = Path("data", "raw", "ccf_apellis_data_cleaning_summary_20231205.xlsx")
+        fp = Path("data", "raw", "ccf_apellis_data_cleaning_summary_20231206.xlsx")
         if not os.path.exists(fp):
             fp = Path("..", fp)
 

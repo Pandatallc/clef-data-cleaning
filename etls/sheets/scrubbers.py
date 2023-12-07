@@ -5,6 +5,7 @@ import pandas as pd
 from typing import List
 from etls.etl_helpers import (
     date_to_blank,
+    numeric_col,
     split_cols,
     string_to_blank_save_date,
     string_to_blank_save_numeric,

@@ -18,7 +18,9 @@ instructions = {
             "format": "string",
             "string_intention": "split",
         },
-        "Hyperlipidemia ICD9Code before FirstDXDated": {
+        "Coronary artery disease ICD9Code before FirstDXDate": {"format": "string", "string_intention":"split"},
+        "Coronary artery disease ICD10Code before FirstDXDate": {"format": "string", "string_intention": "split"},
+        "Hyperlipidemia ICD9Code before FirstDXDate": {
             "format": "string",
             "string_intention": "split",
         },
@@ -99,7 +101,13 @@ instructions = {
                 "str_tail": 42,
                 "str_cols": "A:D",
             },
-        },  # impute
+        },
+        "ALCOHOL_OZ_PER_WK": {"format": "string", 
+                              "string_intention":"impute", 
+                              "args": {"sheet_name": "PAT_POP_ALCOHOL_OZ_PER_WK",
+                                       "str_head": 3,
+                                       "str_tail": 41,
+                                       "str_cols": "A:D"}},  # impute
         "Glucose result 30 days after FirstDxDate": {
             "format": "numeric",
             "string_intention": "blank",
