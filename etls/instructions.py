@@ -20,6 +20,8 @@ instructions = {
         },
         "Coronary artery disease ICD9Code before FirstDXDate": {"format": "string", "string_intention":"split"},
         "Coronary artery disease ICD10Code before FirstDXDate": {"format": "string", "string_intention": "split"},
+        "Diabetes ICD9Code before FirstDXDate": {"format":"string", "string_intention":"split"},
+        "Diabetes ICD10Code before FirstDXDate": {"format": "string", "string_intention":"split"},
         "Hyperlipidemia ICD9Code before FirstDXDate": {
             "format": "string",
             "string_intention": "split",
@@ -118,7 +120,8 @@ instructions = {
         },
     },
     "dxafterdxdate": {
-        "CURRENT_ICD9_LIST": {"format": "string", "string_intention": "split"}
+        "CURRENT_ICD9_LIST": {"format": "string", "string_intention": "split"},
+        "CURRENT_ICD10_LIST": {"format": "string", "string_intention": "split"}
     },
     "ophthafterdxdate": {
         "BUN result 30 days after Contact_DATE": {

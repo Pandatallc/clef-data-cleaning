@@ -30,7 +30,7 @@ opthafterdxdate_delta_counts = {
     "VA_Left_Pressure": 131,  # subtract whitespace count ("", 2)
     "VA_Left_Distance_CC": 5155,  # subtract whitespace count ("", 2)
     "VA_Right_Pressure": 132,  # subtract whitespace counts ("n/a", 1)
-    "VA_Right_Distance_SC": 2535,  # subtract whitespace counts ("", 4)
+    "VA_Right_Distance_SC": 2537,  # subtract whitespace counts ("", 4)
     "VA_Left_Distance_SC": 2780,  # subtract whitespace counts ("", 3), add csv date values (+4)
     "VA_Right_Distance_CC": 4866,  # subtract whitespace counts ("", 5)
     "Hemoglobin a1c result 30 days after Contact_DATE": 2,
