@@ -30,13 +30,14 @@ opthafterdxdate_delta_counts = {
     "VA_Left_Pressure": 131,  # subtract whitespace count ("", 2)
     "VA_Left_Distance_CC": 5155,  # subtract whitespace count ("", 2)
     "VA_Right_Pressure": 132,  # subtract whitespace counts ("n/a", 1)
-    "VA_Right_Distance_SC": 2535,  # subtract whitespace counts ("", 4)
+    "VA_Right_Distance_SC": 2537,  # subtract whitespace counts ("", 4)
     "VA_Left_Distance_SC": 2780,  # subtract whitespace counts ("", 3), add csv date values (+4)
     "VA_Right_Distance_CC": 4866,  # subtract whitespace counts ("", 5)
     "Hemoglobin a1c result 30 days after Contact_DATE": 2,
     "C-reactive protein result 30 days after Contact_DATE": 442,
     "Estimated GFR result 30 days after Contact_DATE": 7908,
 }
+
 
 def mock_VA_sheet():
     return pd.read_excel(
@@ -50,7 +51,9 @@ def mock_VA_sheet():
 @pytest.fixture(scope="session", autouse=True)
 def mock_pat_pop():
     try:
-        return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "pat_pop.csv"), low_memory=False)
+        return pd.read_csv(
+            os.path.join(DATA_DIRECTORY, "interim", "pat_pop.csv"), low_memory=False
+        )
     except:
         return None
 
@@ -58,7 +61,10 @@ def mock_pat_pop():
 @pytest.fixture(scope="session", autouse=True)
 def mock_dxafterdxdate():
     try:
-        return pd.read_csv(os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate.csv"), low_memory=False)
+        return pd.read_csv(
+            os.path.join(DATA_DIRECTORY, "interim", "dxafterdxdate.csv"),
+            low_memory=False,
+        )
     except:
         return None
 
@@ -67,7 +73,8 @@ def mock_dxafterdxdate():
 def mock_ophthafterdxdate():
     try:
         return pd.read_csv(
-            os.path.join(DATA_DIRECTORY, "interim", "ophthafterdxdate.csv"), low_memory=False
+            os.path.join(DATA_DIRECTORY, "interim", "ophthafterdxdate.csv"),
+            low_memory=False,
         )
     except:
         return None
